@@ -1,4 +1,4 @@
-# Authentuication successfull
+# Authentication successful
 
 You can use your terminal to add, read and modify your Pocket.
 
