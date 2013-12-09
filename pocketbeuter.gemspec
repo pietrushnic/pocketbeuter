@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.version       = Pocketbeuter::VERSION
   spec.authors       = ["Piotr Król"]
   spec.email         = ["pietrushnic@gmail.com"]
-  spec.description   = %q{TODO: Write a gem description}
-  spec.summary       = %q{TODO: Write a gem summary}
+  spec.description   = %q{command line interface to Pocket}
+  spec.summary       = %q{command line interface to Pocket}
   spec.homepage      = ""
   spec.license       = "MIT"
 
