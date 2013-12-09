@@ -2,7 +2,7 @@ require "pocketbeuter/version"
 require "net/http"
 require "uri"
 require "launchy"
-require "get_access_token"
+require "pocketbeuter/get_access_token_and_username"
 require "fileutils"
 require "yaml"
 
@@ -21,7 +21,6 @@ module Pocketbeuter
     @config = YAML.load_file(File.expand_path('~/.pocketbeuter/config'))
     config[:dir] = File.expand_path('~/.pocketbeuter')
     config[:file] = config[:dir] + '/config'
-    puts config[:file]
     GetAccessToken.get_access_token_and_username
     save_config
   end
@@ -31,7 +30,6 @@ module Pocketbeuter
     end
 
     if File.exists?(config[:file])
-      puts config.to_yaml
       File.open(config[:file], 'w') { |f| f.write(config.to_yaml) }
     else
       File.open(config[:file], mode: 'w', perm: 0600).close
