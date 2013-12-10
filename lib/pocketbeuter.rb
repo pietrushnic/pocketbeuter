@@ -2,38 +2,35 @@ require "pocketbeuter/version"
 require "net/http"
 require "uri"
 require "launchy"
-require "pocketbeuter/get_access_token_and_username"
+require "pocketbeuter/conf"
+require "pocketbeuter/pocket"
 require "fileutils"
 require "yaml"
+require "thor"
 
 module Pocketbeuter
-  ADD_URL = 'https://getpocket.com/v3/add'
-  SEND_URL = 'https://getpocket.com/v3/send'
-  GET_URL = 'https://getpocket.com/v3/get'
-  OAUTH_URL = 'https://getpocket.com/v3/oauth/request'
-  AUTH_URL = 'https://getpocket.com/auth/authorize'
-  OAUTH_AUTH_URL = 'https://getpocket.com/v3/oauth/authorize'
+  class Runner < Thor
+    package_name "Pocketbeuter"
 
-  def config
-    @config ||= {}
-  end
-  def init
-    @config = YAML.load_file(File.expand_path('~/.pocketbeuter/config'))
-    config[:dir] = File.expand_path('~/.pocketbeuter')
-    config[:file] = config[:dir] + '/config'
-    GetAccessToken.get_access_token_and_username
-    save_config
-  end
-  def save_config
-    unless File.exists?(config[:dir])
-      FileUtils.mkdir_p(config[:dir])
+    desc "init", "initialize configuration and authorize Pocket app"
+    def init
+      Conf.init
     end
-
-    if File.exists?(config[:file])
-      File.open(config[:file], 'w') { |f| f.write(config.to_yaml) }
-    else
-      File.open(config[:file], mode: 'w', perm: 0600).close
+    desc "all", "get all Pocket articles"
+    def all
+      Conf.load_config
+      unless Conf.config[:access_token]
+        Conf.init
+      end
+      Pocket.all
+    end
+    desc "open ARTICLE_ID", "open Pocket article in browser"
+    def open(id)
+      Conf.load_config
+      unless Conf.config[:access_token]
+        Conf.init
+      end
+      Pocket.open(id)
     end
   end
-  extend Pocketbeuter
 end
