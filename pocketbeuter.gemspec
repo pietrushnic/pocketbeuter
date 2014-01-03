@@ -23,4 +23,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "launchy"
   spec.add_development_dependency "thor"
   spec.add_development_dependency "colorize"
+  spec.add_development_dependency "rspec"
 end
