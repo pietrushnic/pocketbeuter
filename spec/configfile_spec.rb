@@ -76,4 +76,31 @@ describe Pocketbeuter::ConfigFile do
       expect(cfg.get_token('foo')).to match(/13ea4f22-b153-d26a-58fe-77777/)
     end
   end
+
+  describe '#path' do
+    it 'get default path' do
+      expect(Pocketbeuter::ConfigFile.instance.path).to match(File.join(File.expand_path('~'), Pocketbeuter::CONFIG_NAME))
+    end
+  end
+
+  describe '#path=' do
+    it 'set path' do
+      cfg = Pocketbeuter::ConfigFile.instance
+      cfg.path = fixtures_path + "/#{Pocketbeuter::CONFIG_NAME}"
+      expect(cfg.path).to match(fixtures_path + "/#{Pocketbeuter::CONFIG_NAME}")
+    end
+  end
+
+  describe '#load_config' do
+    it 'when file exist' do
+      cfg = Pocketbeuter::ConfigFile.instance
+      cfg.path = fixtures_path + "/#{Pocketbeuter::CONFIG_NAME}"
+      expect(cfg.load_config['accounts']['foo'].keys).to include('consumer_key','redirect_uri')
+    end
+    it 'when file doesn not exist' do
+      cfg = Pocketbeuter::ConfigFile.instance
+      cfg.path = fixtures_path + "/foo"
+      expect(cfg.load_config['accounts'].keys).to be_empty
+    end
+  end
 end
