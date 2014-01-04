@@ -1,8 +1,7 @@
 ---
 accounts:
   foo:
-    consumer_key: 21312-8647bd0425d5a4541e07dfcf
-    redirect_uri: https://github.com/pietrushnic/pocketbeuter/blob/master/auth.md
-  bar:
     consumer_key: 77777-8647bd0425d5a4541e07dfcf
     redirect_uri: https://github.com/pietrushnic/pocketbeuter/blob/master/auth.md
+    access_token: 13ea4f22-b153-d26a-58fe-77777
+    request_token: 13ea4f22-1111-d26a-58fe-77777
