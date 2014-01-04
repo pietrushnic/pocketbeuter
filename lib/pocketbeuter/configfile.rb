@@ -2,8 +2,8 @@ require 'singleton'
 require 'yaml'
 
 module Pocketbeuter
-  CONFIG_NAME = '.pocketbeuterrc'
   class ConfigFile
+    CONFIG_NAME = '.pocketbeuterrc'
     include Singleton
     attr_reader :path
 

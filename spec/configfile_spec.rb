@@ -16,7 +16,7 @@ describe Pocketbeuter::ConfigFile do
   describe '#[]' do
     it 'returns user account' do
       cfg = Pocketbeuter::ConfigFile.instance
-      cfg.path = fixtures_path + "/#{Pocketbeuter::CONFIG_NAME}"
+      cfg.path = fixtures_path + "/#{Pocketbeuter::ConfigFile::CONFIG_NAME}"
       expect(cfg['foo'].keys).to include('consumer_key','redirect_uri')
     end
   end
@@ -38,7 +38,7 @@ describe Pocketbeuter::ConfigFile do
   describe '#accounts' do
     it 'returns accounts' do
       cfg = Pocketbeuter::ConfigFile.instance
-      cfg.path = fixtures_path + "/#{Pocketbeuter::CONFIG_NAME}"
+      cfg.path = fixtures_path + "/#{Pocketbeuter::ConfigFile::CONFIG_NAME}"
       expect(cfg.accounts.keys).to match_array(['foo'])
     end
   end
@@ -46,7 +46,7 @@ describe Pocketbeuter::ConfigFile do
   describe '#consumer_key' do
     it 'returns consumer_key' do
       cfg = Pocketbeuter::ConfigFile.instance
-      cfg.path = fixtures_path + "/#{Pocketbeuter::CONFIG_NAME}"
+      cfg.path = fixtures_path + "/#{Pocketbeuter::ConfigFile::CONFIG_NAME}"
       expect(cfg.consumer_key('foo')).to match(/77777-8647bd0425d5a4541e07dfcf/)
     end
   end
@@ -54,7 +54,7 @@ describe Pocketbeuter::ConfigFile do
   describe '#redirect_uri' do
     it 'returns redirect_uri' do
       cfg = Pocketbeuter::ConfigFile.instance
-      cfg.path = fixtures_path + "/#{Pocketbeuter::CONFIG_NAME}"
+      cfg.path = fixtures_path + "/#{Pocketbeuter::ConfigFile::CONFIG_NAME}"
       expect(cfg.redirect_uri('foo')).to match(/https:\/\/github.com/)
     end
   end
@@ -62,7 +62,7 @@ describe Pocketbeuter::ConfigFile do
   describe '#set_code' do
     it 'save request_token to config file' do
       cfg = Pocketbeuter::ConfigFile.instance
-      cfg.path = fixtures_path + "/#{Pocketbeuter::CONFIG_NAME}"
+      cfg.path = fixtures_path + "/#{Pocketbeuter::ConfigFile::CONFIG_NAME}"
       cfg.set_code('foo', '13ea4f22-1111-d26a-58fe-77777')
       expect(cfg.get_code('foo')).to match(/13ea4f22-1111-d26a-58fe-77777/)
     end
@@ -71,7 +71,7 @@ describe Pocketbeuter::ConfigFile do
   describe '#set_token' do
     it 'save access_token to config file' do
       cfg = Pocketbeuter::ConfigFile.instance
-      cfg.path = fixtures_path + "/#{Pocketbeuter::CONFIG_NAME}"
+      cfg.path = fixtures_path + "/#{Pocketbeuter::ConfigFile::CONFIG_NAME}"
       cfg.set_token('foo', '13ea4f22-b153-d26a-58fe-77777')
       expect(cfg.get_token('foo')).to match(/13ea4f22-b153-d26a-58fe-77777/)
     end
@@ -79,22 +79,22 @@ describe Pocketbeuter::ConfigFile do
 
   describe '#path' do
     it 'get default path' do
-      expect(Pocketbeuter::ConfigFile.instance.path).to match(File.join(File.expand_path('~'), Pocketbeuter::CONFIG_NAME))
+      expect(Pocketbeuter::ConfigFile.instance.path).to match(File.join(File.expand_path('~'), Pocketbeuter::ConfigFile::CONFIG_NAME))
     end
   end
 
   describe '#path=' do
     it 'set path' do
       cfg = Pocketbeuter::ConfigFile.instance
-      cfg.path = fixtures_path + "/#{Pocketbeuter::CONFIG_NAME}"
-      expect(cfg.path).to match(fixtures_path + "/#{Pocketbeuter::CONFIG_NAME}")
+      cfg.path = fixtures_path + "/#{Pocketbeuter::ConfigFile::CONFIG_NAME}"
+      expect(cfg.path).to match(fixtures_path + "/#{Pocketbeuter::ConfigFile::CONFIG_NAME}")
     end
   end
 
   describe '#load_config' do
     it 'when file exist' do
       cfg = Pocketbeuter::ConfigFile.instance
-      cfg.path = fixtures_path + "/#{Pocketbeuter::CONFIG_NAME}"
+      cfg.path = fixtures_path + "/#{Pocketbeuter::ConfigFile::CONFIG_NAME}"
       expect(cfg.load_config['accounts']['foo'].keys).to include('consumer_key','redirect_uri')
     end
     it 'when file doesn not exist' do
