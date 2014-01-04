@@ -73,8 +73,13 @@ module Pocketbeuter
         f.write @config.to_yaml
       end
     end
+
     def default_config
       {'accounts' => {}}
+    end
+
+    def reset
+      send(:initialize)
     end
   end
 end

@@ -2,6 +2,10 @@ require 'pocketbeuter'
 require 'helpers'
 
 describe Pocketbeuter::ConfigFile do
+  after :each do
+    Pocketbeuter::ConfigFile.instance.reset
+  end
+
   it 'is a singleton' do
     expect(Pocketbeuter::ConfigFile).to be_a Class
     expect do
