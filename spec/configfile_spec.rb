@@ -35,8 +35,8 @@ describe Pocketbeuter::ConfigFile do
     end
   end
 
-  describe '#account' do
-    it 'returns account' do
+  describe '#accounts' do
+    it 'returns accounts' do
       cfg = Pocketbeuter::ConfigFile.instance
       cfg.path = fixtures_path + "/#{Pocketbeuter::CONFIG_NAME}"
       expect(cfg.accounts.keys).to match_array(['foo'])
