@@ -81,5 +81,9 @@ module Pocketbeuter
     def reset
       send(:initialize)
     end
+
+    def empty?
+      @config == default_config
+    end
   end
 end

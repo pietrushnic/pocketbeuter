@@ -102,5 +102,17 @@ describe Pocketbeuter::ConfigFile do
       cfg.path = fixtures_path + "/foo"
       expect(cfg.load_config['accounts'].keys).to be_empty
     end
+    it 'when file path is empty' do
+      cfg = Pocketbeuter::ConfigFile.instance
+      cfg.path = ''
+      expect(cfg.load_config['accounts'].keys).to be_empty
+    end
+  end
+
+  describe '#empty?' do
+    it 'return default_config' do
+      cfg = Pocketbeuter::ConfigFile.instance
+      expect(cfg.empty?).to be_true
+    end
   end
 end
