@@ -12,10 +12,14 @@ module Pocketbeuter
       @config = load_config
     end
 
-    def path=(path)
-      @path = path
-      @config = load_config
-      @path
+    def [](account)
+      accounts[account]
+    end
+
+    def []=(subsec, sec)
+      @config[subsec] ||= {}
+      @config[subsec].merge!(sec)
+      save_config
     end
 
     def accounts
@@ -50,14 +54,10 @@ module Pocketbeuter
       load_config
     end
 
-    def [](account)
-      accounts[account]
-    end
-
-    def []=(subsec, sec)
-      @config[subsec] ||= {}
-      @config[subsec].merge!(sec)
-      save_config
+    def path=(path)
+      @path = path
+      @config = load_config
+      @path
     end
 
     def load_config
