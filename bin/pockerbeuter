@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
 
 require 'pocketbeuter'
-Pocketbeuter::Runner.start
+Pocketbeuter::CLI.start(ARGV)
 
