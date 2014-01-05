@@ -26,11 +26,11 @@ module Pocketbeuter
       @config['accounts']
     end
 
-    def consumer_key(name)
+    def consumer_key(name=default_account)
       accounts[name]['consumer_key']
     end
 
-    def redirect_uri(name)
+    def redirect_uri(name=default_account)
       accounts[name]['redirect_uri']
     end
 
@@ -75,7 +75,17 @@ module Pocketbeuter
     end
 
     def default_config
-      {'accounts' => {}}
+      { 'options' => { 'default_account' => ENV['USER']}, 'accounts' => {}}
+    end
+
+    def default_account
+      @config['options']['default_account']
+    end
+
+    def set_default_account=(name)
+      @config['options']['default_account'] = name
+      save_config
+      load_config
     end
 
     def reset

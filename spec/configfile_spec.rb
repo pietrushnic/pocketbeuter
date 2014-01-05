@@ -44,10 +44,25 @@ describe Pocketbeuter::ConfigFile do
   end
 
   describe '#consumer_key' do
-    it 'returns consumer_key' do
+    it 'returns consumer_key for user foo' do
       cfg = Pocketbeuter::ConfigFile.instance
       cfg.path = fixtures_path + "/#{Pocketbeuter::ConfigFile::CONFIG_NAME}"
       expect(cfg.consumer_key('foo')).to match(/77777-8647bd0425d5a4541e07dfcf/)
+    end
+    it 'returns consumer_key for default_account' do
+      cfg = Pocketbeuter::ConfigFile.instance
+      cfg.path = fixtures_path + "/#{Pocketbeuter::ConfigFile::CONFIG_NAME}"
+      cfg.set_default_account = 'foo'
+      expect(cfg.consumer_key).to match(/77777-8647bd0425d5a4541e07dfcf/)
+    end
+    it 'returns consumer_key for invalid default_account' do
+      cfg = Pocketbeuter::ConfigFile.instance
+      cfg.path = fixtures_path + "/#{Pocketbeuter::ConfigFile::CONFIG_NAME}"
+      cfg.set_default_account = 'some_invalid_account'
+      expect do
+        cfg.consumer_key
+      end.to raise_error(NoMethodError, /undefined method/)
+      cfg.set_default_account = 'foo'
     end
   end
 
@@ -56,6 +71,21 @@ describe Pocketbeuter::ConfigFile do
       cfg = Pocketbeuter::ConfigFile.instance
       cfg.path = fixtures_path + "/#{Pocketbeuter::ConfigFile::CONFIG_NAME}"
       expect(cfg.redirect_uri('foo')).to match(/https:\/\/github.com/)
+    end
+    it 'returns redirect_uri for default_account' do
+      cfg = Pocketbeuter::ConfigFile.instance
+      cfg.path = fixtures_path + "/#{Pocketbeuter::ConfigFile::CONFIG_NAME}"
+      cfg.set_default_account = 'foo'
+      expect(cfg.redirect_uri).to match(/https:\/\/github.com/)
+    end
+    it 'returns redirect_uri for invalid default_account' do
+      cfg = Pocketbeuter::ConfigFile.instance
+      cfg.path = fixtures_path + "/#{Pocketbeuter::ConfigFile::CONFIG_NAME}"
+      cfg.set_default_account = 'some_invalid_account'
+      expect do
+        cfg.redirect_uri
+      end.to raise_error(NoMethodError, /undefined method/)
+      cfg.set_default_account = 'foo'
     end
   end
 
@@ -113,6 +143,24 @@ describe Pocketbeuter::ConfigFile do
     it 'return default_config' do
       cfg = Pocketbeuter::ConfigFile.instance
       expect(cfg.empty?).to be_true
+    end
+  end
+
+  describe '#default_account' do
+    it 'return default_account' do
+      cfg = Pocketbeuter::ConfigFile.instance
+      expect(cfg.default_account).to match(ENV['USER'])
+    end
+  end
+
+  describe '#set_default_account' do
+    it 'set and save default_account' do
+      cfg = Pocketbeuter::ConfigFile.instance
+      cfg.path = fixtures_path + "/#{Pocketbeuter::ConfigFile::CONFIG_NAME}"
+      cfg.set_default_account  = 'foobar1'
+      expect(cfg.default_account).to match(/foobar1/)
+      cfg.set_default_account  = 'foobar'
+      expect(cfg.default_account).to match(/foobar/)
     end
   end
 end

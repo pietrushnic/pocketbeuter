@@ -1,4 +1,6 @@
 ---
+options:
+  default_account: foo
 accounts:
   foo:
     consumer_key: 77777-8647bd0425d5a4541e07dfcf
