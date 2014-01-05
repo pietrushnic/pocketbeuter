@@ -1,0 +1,53 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://getpocket.com/v3/oauth/request
+    body:
+      encoding: US-ASCII
+      string: consumer_key=21312-8647bd0425d5a4541e07dfcf&redirect_uri=https%3A%2F%2Fgithub.com%2Fpietrushnic%2Fpocketbeuter%2Fblob%2Fmaster%2Fauth.md
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - '*/*'
+      User-Agent:
+      - Ruby
+      Content-Type:
+      - application/x-www-form-urlencoded
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Cache-Control:
+      - private
+      Content-Type:
+      - application/x-www-form-urlencoded
+      Date:
+      - Sat, 04 Jan 2014 00:29:01 GMT
+      Expires:
+      - Thu, 19 Nov 1981 08:52:00 GMT
+      P3p:
+      - policyref="/w3c/p3p.xml", CP="ALL CURa ADMa DEVa OUR IND UNI COM NAV INT STA
+        PRE"
+      Pragma:
+      - no-cache
+      Server:
+      - Apache
+      Set-Cookie:
+      - PHPSESSID=p8vh4l67prknrlq82fg10k04g1; path=/
+      Status:
+      - 200 OK
+      X-Source:
+      - Pocket
+      Content-Length:
+      - '35'
+      Connection:
+      - keep-alive
+    body:
+      encoding: UTF-8
+      string: code=d410281d-5f95-f8f6-11cc-d81cc3
+    http_version: 
+  recorded_at: Sat, 04 Jan 2014 00:29:01 GMT
+recorded_with: VCR 2.8.0
