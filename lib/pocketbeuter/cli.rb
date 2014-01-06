@@ -11,6 +11,7 @@ module Pocketbeuter
     OAUTH_URL = 'https://getpocket.com/v3/oauth/request'
     AUTH_URL = 'https://getpocket.com/auth/authorize'
     OAUTH_AUTH_URL = 'https://getpocket.com/v3/oauth/authorize'
+    POCKET_DEV = 'http://getpocket.com/developer/apps/new'
     check_unknown_options!
     class_option 'config', :aliases => '-c', :type => :string, :default => File.join(File.expand_path('~'), Pocketbeuter::ConfigFile::CONFIG_NAME), :desc => 'Path to config file', :banner => 'CONFIG'
 
