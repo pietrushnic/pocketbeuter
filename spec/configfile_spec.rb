@@ -142,6 +142,7 @@ describe Pocketbeuter::ConfigFile do
   describe '#empty?' do
     it 'return default_config' do
       cfg = Pocketbeuter::ConfigFile.instance
+      cfg.path = ''
       expect(cfg.empty?).to be_true
     end
   end
@@ -149,6 +150,7 @@ describe Pocketbeuter::ConfigFile do
   describe '#default_account' do
     it 'return default_account' do
       cfg = Pocketbeuter::ConfigFile.instance
+      cfg.path = ''
       expect(cfg.default_account).to match(ENV['USER'])
     end
   end
