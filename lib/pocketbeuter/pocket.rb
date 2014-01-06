@@ -7,13 +7,6 @@ module Pocketbeuter
   class Pocket
     def initialize
     end
-    def create_app
-      puts "Good day Sir/Madam before you can use pocketbeuter, you'll first"
-      puts "need to register your application. Please follow below steps:"
-      puts "    1. Log in into Pocket site."
-      puts "    2. Create an Application - complete required fields and click"
-      puts "       \"CREATE APPLICATION\" button."
-      puts "       NOTE: application must have unique name (I recommend: <login>/pocketbeuter)"
   end
 end
 
