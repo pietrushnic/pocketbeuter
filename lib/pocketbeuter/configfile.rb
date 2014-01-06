@@ -93,7 +93,6 @@ module Pocketbeuter
         @config['options']['default_account']
       rescue
         if accounts.count > 0
-          @config['options'] = {}
           self.set_default_account =  accounts.first[0]
         else
           self.set_default_account = ENV['USER']
@@ -103,6 +102,7 @@ module Pocketbeuter
     end
 
     def set_default_account=(name)
+      @config['options'] ||= {}
       @config['options']['default_account'] = name
       save_config
       load_config
