@@ -15,9 +15,29 @@ module Pocketbeuter
     check_unknown_options!
     class_option 'config', :aliases => '-c', :type => :string, :default => File.join(File.expand_path('~'), Pocketbeuter::ConfigFile::CONFIG_NAME), :desc => 'Path to config file', :banner => 'CONFIG'
 
+    attr_reader :config
     def initialize(*)
       @config = Pocketbeuter::ConfigFile.instance
       super
+    end
+
+    desc 'createapp', 'create Pocket API application'
+    def createapp
+      @config.load_config
+      say "Good day Sir/Madam before you can use pocketbeuter, you'll first"
+      say "need to register your application. Please follow below steps:"
+      say "    1. Log in into Pocket site."
+      say "    2. Create an Application - complete required fields and click"
+      say "       \"CREATE APPLICATION\" button."
+      say "       NOTE: application must have unique name (I recommend: <login>/pocketbeuter),"
+      say "             add application description and give Add, Modify and Retrieve permissions,"
+      say "             select platform for your application (i.e. Desktop (other)), and accept"
+      say "             license terms"
+      ask " Press any key to open Pocket Create an Application form"
+      require 'launchy'
+      Launchy.open(Pocketbeuter::CLI::POCKET_DEV)
+      @config.consumer_key = ask 'Enter consumer key:'
+      @config.redirect_uri = ask 'Enter redirect uri:'
     end
 
     desc 'authorize', 'request Pocket user authorization'
