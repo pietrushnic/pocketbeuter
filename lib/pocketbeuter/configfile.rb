@@ -10,6 +10,8 @@ module Pocketbeuter
     def initialize
       @path = File.join(File.expand_path('~'), CONFIG_NAME)
       @config = load_config
+      @consumer_key = nil
+      @redirect_uri = nil
     end
 
     def [](account)
@@ -26,12 +28,20 @@ module Pocketbeuter
       @config['accounts']
     end
 
-    def consumer_key(name=default_account)
-      accounts[name]['consumer_key']
+    def consumer_key
+      accounts[default_account]['consumer_key']
     end
 
-    def redirect_uri(name=default_account)
-      accounts[name]['redirect_uri']
+    def consumer_key=(key)
+      @config['accounts'][default_account]['consumer_key'] = key
+    end
+
+    def redirect_uri
+      accounts[default_account]['redirect_uri']
+    end
+
+    def redirect_uri=(uri)
+      @config['accounts'][default_account]['redirect_uri'] = uri
     end
 
     def get_token(name)
@@ -79,7 +89,17 @@ module Pocketbeuter
     end
 
     def default_account
-      @config['options']['default_account']
+      begin
+        @config['options']['default_account']
+      rescue
+        if accounts.count > 0
+          @config['options'] = {}
+          self.set_default_account =  accounts.first[0]
+        else
+          self.set_default_account = ENV['USER']
+        end
+        @config['options']['default_account']
+      end
     end
 
     def set_default_account=(name)
