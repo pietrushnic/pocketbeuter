@@ -34,8 +34,16 @@ module Pocketbeuter
       say "             select platform for your application (i.e. Desktop (other)), and accept"
       say "             license terms"
       ask " Press any key to open Pocket Create an Application form"
-      require 'launchy'
-      Launchy.open(Pocketbeuter::CLI::POCKET_DEV)
+      say
+      #Launchy.open(Pocketbeuter::CLI::POCKET_DEV)
+      account_name = ask "Enter account name [#{ENV['USER']}]:"
+      if account_name.empty?
+        @config.account_name = ENV['USER']
+      else
+        @config.account_name = account_name
+      end
+
+      #TODO: handle empty consumer_key
       @config.consumer_key = ask 'Enter consumer key:'
       @config.redirect_uri = ask 'Enter redirect uri:'
     end
