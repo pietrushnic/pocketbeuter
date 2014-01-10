@@ -1,3 +1,4 @@
+require 'launchy'
 require 'thor'
 require 'pocketbeuter/get_access_token_and_username'
 require 'pocketbeuter/configfile'
