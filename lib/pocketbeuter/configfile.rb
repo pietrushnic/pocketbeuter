@@ -10,12 +10,10 @@ module Pocketbeuter
     def initialize
       @path = File.join(File.expand_path('~'), CONFIG_NAME)
       @config = load_config
-      @consumer_key = nil
-      @redirect_uri = nil
     end
 
-    def [](account)
-      accounts[account]
+    def [](node)
+      @config[node]
     end
 
     def []=(subsec, sec)
@@ -24,44 +22,66 @@ module Pocketbeuter
       save_config
     end
 
-    def accounts
-      @config['accounts']
+    def account
+      @config['account']
+    end
+
+    def account=(value)
+      @config['account'] ||= value.keys[0]
+      @config['account'][value.keys[0]] = value[value.keys[0]]
+    end
+
+    def account_name
+      @config['account'].keys[0]
+    end
+
+    def account_name=(name)
+      @config['account'][name] = {}
     end
 
     def consumer_key
-      accounts[default_account]['consumer_key']
+      @config['account'][account_name]['consumer_key']
     end
 
     def consumer_key=(key)
-      @config['accounts'][default_account]['consumer_key'] = key
+      @config['account'][account_name] ||= 'consumer_key'
+      @config['account'][account_name]['consumer_key'] = key
     end
 
     def redirect_uri
-      accounts[default_account]['redirect_uri']
+      @config['account'][account_name]['redirect_uri']
     end
 
     def redirect_uri=(uri)
-      @config['accounts'][default_account]['redirect_uri'] = uri
+      @config['account'][account_name] ||= 'redirect_uri'
+      @config['account'][account_name]['redirect_uri'] = uri
     end
 
-    def get_token(name)
-      accounts[name]['access_token']
+    def access_token
+      @config['account'][account_name]['access_token']
     end
 
-    def set_token(name, token)
-      @config['accounts'][name]['access_token'] = token
-      save_config
-      load_config
+    def access_token=(token)
+      @config['account'][account_name] ||= 'access_token'
+      @config['account'][account_name]['access_token'] = token
     end
 
-    def get_code(name)
-      accounts[name]['request_token']
+    def username
+      @config['account'][account_name]['username']
     end
 
-    def set_code(name, code)
-      @config['accounts'][name]['request_token'] = code
-      save_config
-      load_config
+    def username=(name)
+      @config['account'][account_name] ||= 'username'
+      @config['account'][account_name]['username'] = name
+    end
+
+    def code
+      @config['account'][account_name]['code']
+    end
+
+    def code=(token)
+      @config['account'][account_name] ||= 'code'
+      @config['account'][account_name]['code'] = token
     end
 
     def path=(path)
@@ -72,7 +92,11 @@ module Pocketbeuter
 
     def load_config
       require 'yaml'
-      YAML.load_file(@path)
+      if YAML.load_file(@path)
+        YAML.load_file(@path)
+      else
+        default_config
+      end
     rescue Errno::ENOENT
       default_config
     end
@@ -85,27 +109,7 @@ module Pocketbeuter
     end
 
     def default_config
-      { 'options' => { 'default_account' => ENV['USER']}, 'accounts' => {}}
-    end
-
-    def default_account
-      begin
-        @config['options']['default_account']
-      rescue
-        if accounts.count > 0
-          self.set_default_account =  accounts.first[0]
-        else
-          self.set_default_account = ENV['USER']
-        end
-        @config['options']['default_account']
-      end
-    end
-
-    def set_default_account=(name)
-      @config['options'] ||= {}
-      @config['options']['default_account'] = name
-      save_config
-      load_config
+      { 'options' => {}, 'account' => {}}
     end
 
     def reset
