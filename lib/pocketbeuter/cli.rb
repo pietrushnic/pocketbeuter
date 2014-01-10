@@ -24,7 +24,6 @@ module Pocketbeuter
 
     desc 'createapp', 'create Pocket API application'
     def createapp
-      @config.load_config
       say "Good day Sir/Madam before you can use pocketbeuter, you'll first"
       say "need to register your application. Please follow below steps:"
       say "    1. Log in into Pocket site."
