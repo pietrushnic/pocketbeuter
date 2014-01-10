@@ -7,9 +7,10 @@
 require 'webmock/rspec'
 require 'vcr'
 
-VCR.config do |c|
+VCR.configure do |c|
   c.cassette_library_dir = 'spec/fixtures/vcr_cassettes'
   c.hook_into :webmock
+  c.configure_rspec_metadata!
 end
 
 RSpec.configure do |config|
@@ -22,5 +23,4 @@ RSpec.configure do |config|
   # the seed, which is printed after each run.
   #     --seed 1234
   config.order = 'random'
-  config.extend VCR::RSpec::Macros
 end
