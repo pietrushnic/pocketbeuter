@@ -347,20 +347,30 @@ describe Pocketbeuter::ConfigFile do
   end
 
   describe '#load_config' do
+    before do
+      File.open(fixtures_path + "/emptyrc", File::RDWR | File::TRUNC | File::CREAT, 0600) do |f|
+        f.write ""
+      end
+    end
     it 'when file exist' do
       cfg = Pocketbeuter::ConfigFile.instance
-      cfg.path = fixtures_path + "/#{Pocketbeuter::ConfigFile::CONFIG_NAME}"
-      expect(cfg.load_config['accounts']['foo'].keys).to include('consumer_key','redirect_uri')
+      cfg.path = fixtures_path + "/multiple_accounts"
+      expect(cfg.load_config['account']['foo'].keys).to include('consumer_key','redirect_uri')
+    end
+    it 'when file exist but is empty' do
+      cfg = Pocketbeuter::ConfigFile.instance
+      cfg.path = fixtures_path + "/emptyrc"
+      expect(cfg.load_config['account'].keys).to be_empty
     end
     it 'when file doesn not exist' do
       cfg = Pocketbeuter::ConfigFile.instance
       cfg.path = fixtures_path + "/foo"
-      expect(cfg.load_config['accounts'].keys).to be_empty
+      expect(cfg.load_config['account'].keys).to be_empty
     end
     it 'when file path is empty' do
       cfg = Pocketbeuter::ConfigFile.instance
       cfg.path = ''
-      expect(cfg.load_config['accounts'].keys).to be_empty
+      expect(cfg.load_config['account'].keys).to be_empty
     end
   end
 
