@@ -381,33 +381,4 @@ describe Pocketbeuter::ConfigFile do
       expect(cfg.empty?).to be_true
     end
   end
-
-  describe '#default_account' do
-    it 'empty config' do
-      cfg = Pocketbeuter::ConfigFile.instance
-      cfg.path = ''
-      expect(cfg.default_account).to match(ENV['USER'])
-    end
-    it 'default_account not set' do
-      cfg = Pocketbeuter::ConfigFile.instance
-      cfg.path = fixtures_path + "/no_default_account"
-      expect(cfg.default_account).to match('foo')
-    end
-    it 'default_account set to bar' do
-      cfg = Pocketbeuter::ConfigFile.instance
-      cfg.path = fixtures_path + "/bar_default_account"
-      expect(cfg.default_account).to match('bar')
-    end
-  end
-
-  describe '#set_default_account' do
-    it 'set and save default_account' do
-      cfg = Pocketbeuter::ConfigFile.instance
-      cfg.path = fixtures_path + "/#{Pocketbeuter::ConfigFile::CONFIG_NAME}"
-      cfg.set_default_account  = 'foobar1'
-      expect(cfg.default_account).to match(/foobar1/)
-      cfg.set_default_account  = 'foobar'
-      expect(cfg.default_account).to match(/foobar/)
-    end
-  end
 end
