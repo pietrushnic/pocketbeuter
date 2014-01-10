@@ -1,0 +1,6 @@
+---
+options:
+    abc:
+        - foo
+    cde:
+        - bar

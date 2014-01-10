@@ -1,7 +1,5 @@
 ---
-options:
-  default_account: foo
-accounts:
+account:
   foo:
     consumer_key: 11111-8647bd0425d5a4541e07dfcf
     redirect_uri: https://github.com/pietrushnic/pocketbeuter/blob/master/auth.md
