@@ -14,101 +14,321 @@ describe Pocketbeuter::ConfigFile do
   end
 
   describe '#[]' do
-    it 'returns user account' do
+    it 'return account' do
       cfg = Pocketbeuter::ConfigFile.instance
-      cfg.path = fixtures_path + "/#{Pocketbeuter::ConfigFile::CONFIG_NAME}"
-      expect(cfg['foo'].keys).to include('consumer_key','redirect_uri')
+      cfg.path = fixtures_path + "/multiple_accounts"
+      expect(cfg['account'].keys).to match_array(['foo'])
+    end
+    it 'return options' do
+      cfg = Pocketbeuter::ConfigFile.instance
+      cfg.path = fixtures_path + "/options"
+      expect(cfg['options'].keys).to match_array(['abc', 'cde'])
+    end
+  end
+
+  describe '#account' do
+    it 'return account' do
+      cfg = Pocketbeuter::ConfigFile.instance
+      cfg.path = fixtures_path + "/multiple_accounts"
+      expect(cfg.account.keys).to match_array(['foo'])
+    end
+  end
+
+  describe '#account=' do
+    before do
+      File.open(fixtures_path + '/emptyrc', File::RDWR | File::CREAT | File::TRUNC, 600) do |f|
+        f.write ''
+      end
+    end
+    it 'set foo account' do
+      cfg = Pocketbeuter::ConfigFile.instance
+      cfg.path = fixtures_path + "/emptyrc"
+      cfg.account = {
+        'foo' => {}
+      }
+      expect(cfg.account.keys).to match_array(['foo'])
+    end
+    it 'set empty foo account' do
+      cfg = Pocketbeuter::ConfigFile.instance
+      cfg.path = fixtures_path + "/emptyrc"
+      cfg.account = {
+        'foo' => {}
+      }
+      expect(cfg.account.values[0]).to be_empty
+    end
+  end
+
+  describe '#account_name' do
+    it 'return account' do
+      cfg = Pocketbeuter::ConfigFile.instance
+      cfg.path = fixtures_path + "/multiple_accounts"
+      expect(cfg.account_name).to match(/foo/)
+    end
+  end
+
+  describe '#account_name=' do
+    before do
+      File.open(fixtures_path + '/emptyrc', File::RDWR | File::CREAT | File::TRUNC, 600) do |f|
+        f.write ''
+      end
+    end
+    it 'return account' do
+      cfg = Pocketbeuter::ConfigFile.instance
+      cfg.path = fixtures_path + "/emptyrc"
+      cfg.account_name = 'foo'
+      expect(cfg.account_name).to match(/foo/)
     end
   end
 
   describe '#[]=' do
+    before do
+      File.open(fixtures_path + '/emptyrc', File::RDWR | File::CREAT | File::TRUNC, 600) do |f|
+        f.write ''
+      end
+    end
     it 'adds user account' do
       cfg = Pocketbeuter::ConfigFile.instance
-      cfg.path = '/tmp/.pocketbeuterrc'
-      cfg['accounts'] = {
+      cfg.path = fixtures_path + '/emptyrc'
+      cfg['account'] = {
         'foo' => {
-          :consumer_key => '1234-12345567889',
-          :redirect_uri => 'http://google.com'
+          'consumer_key' => '1234-12345567889',
+          'redirect_uri' => 'http://google.com'
         }
       }
-      expect(cfg['foo'].keys).to match_array([:consumer_key, :redirect_uri])
+      expect(cfg['account'].keys).to match_array(['foo'])
+      expect(cfg['account']['foo'].keys).to match_array(['consumer_key', 'redirect_uri'])
     end
-  end
-
-  describe '#accounts' do
-    it 'returns accounts' do
+    it 'adds options' do
       cfg = Pocketbeuter::ConfigFile.instance
-      cfg.path = fixtures_path + "/#{Pocketbeuter::ConfigFile::CONFIG_NAME}"
-      expect(cfg.accounts.keys).to match_array(['foo'])
-    end
-  end
-
-  describe '#consumer_key' do
-    it 'returns consumer_key for user foo' do
-      cfg = Pocketbeuter::ConfigFile.instance
-      cfg.path = fixtures_path + "/#{Pocketbeuter::ConfigFile::CONFIG_NAME}"
-      old_default_account = cfg.default_account
-      cfg.set_default_account = 'foo'
-      expect(cfg.consumer_key).to match(/77777-8647bd0425d5a4541e07dfcf/)
-      cfg.set_default_account = old_default_account
-    end
-    it 'returns consumer_key for default_account' do
-      cfg = Pocketbeuter::ConfigFile.instance
-      cfg.path = fixtures_path + "/#{Pocketbeuter::ConfigFile::CONFIG_NAME}"
-      cfg.set_default_account = 'foo'
-      expect(cfg.consumer_key).to match(/77777-8647bd0425d5a4541e07dfcf/)
-    end
-    it 'returns consumer_key for invalid default_account' do
-      cfg = Pocketbeuter::ConfigFile.instance
-      cfg.path = fixtures_path + "/#{Pocketbeuter::ConfigFile::CONFIG_NAME}"
-      cfg.set_default_account = 'some_invalid_account'
-      expect do
-        cfg.consumer_key
-      end.to raise_error(NoMethodError, /undefined method/)
-      cfg.set_default_account = 'foo'
+      cfg.path = fixtures_path + '/emptyrc'
+      cfg['options'] = {
+        'foo' => {
+          'consumer_key' => '1234-12345567889',
+          'redirect_uri' => 'http://google.com'
+        }
+      }
+      expect(cfg['options'].keys).to match_array(['foo'])
+      expect(cfg['options']['foo'].keys).to match_array(['consumer_key', 'redirect_uri'])
     end
   end
 
   describe '#redirect_uri' do
-    it 'no default_account set' do
-      cfg = Pocketbeuter::ConfigFile.instance
-      cfg.path = fixtures_path + "/#{Pocketbeuter::ConfigFile::CONFIG_NAME}"
-      expect(cfg.redirect_uri).to match(/https:\/\/github.com/)
+    before do
+      File.open(fixtures_path + '/emptyrc', File::RDWR | File::CREAT | File::TRUNC, 600) do |f|
+        f.write ''
+      end
+      @cfg = Pocketbeuter::ConfigFile.instance
+      @cfg.path = fixtures_path + '/emptyrc'
+      @cfg['account'] = {
+        'foo' => {
+          'consumer_key' => '1234-12345567889',
+          'redirect_uri' => 'http://google.com'
+        }
+      }
     end
-    it 'returns redirect_uri for default_account' do
-      cfg = Pocketbeuter::ConfigFile.instance
-      cfg.path = fixtures_path + "/#{Pocketbeuter::ConfigFile::CONFIG_NAME}"
-      old_default_account = cfg.default_account
-      cfg.set_default_account = 'foo'
-      expect(cfg.redirect_uri).to match(/https:\/\/github.com/)
-      cfg.set_default_account = old_default_account
-    end
-    it 'returns redirect_uri for invalid default_account' do
-      cfg = Pocketbeuter::ConfigFile.instance
-      cfg.path = fixtures_path + "/#{Pocketbeuter::ConfigFile::CONFIG_NAME}"
-      cfg.set_default_account = 'some_invalid_account'
-      expect do
-        cfg.redirect_uri
-      end.to raise_error(NoMethodError, /undefined method/)
-      cfg.set_default_account = 'foo'
+
+    it 'returns redirect_uri for user foo' do
+      expect(@cfg.redirect_uri).to match(/http:\/\/google.com/)
     end
   end
 
-  describe '#set_code' do
-    it 'save request_token to config file' do
-      cfg = Pocketbeuter::ConfigFile.instance
-      cfg.path = fixtures_path + "/#{Pocketbeuter::ConfigFile::CONFIG_NAME}"
-      cfg.set_code('foo', '13ea4f22-1111-d26a-58fe-77777')
-      expect(cfg.get_code('foo')).to match(/13ea4f22-1111-d26a-58fe-77777/)
+  describe '#redirect_uri=' do
+    before do
+      File.open(fixtures_path + '/emptyrc', File::RDWR | File::CREAT | File::TRUNC, 600) do |f|
+        f.write ''
+      end
+      @cfg = Pocketbeuter::ConfigFile.instance
+      @cfg.path = fixtures_path + '/emptyrc'
+      @cfg['account'] = {
+        'foo' => {
+        }
+      }
+    end
+
+    it 'returns redirect_uri for user foo' do
+      @cfg.redirect_uri = 'http://google.com'
+      expect(@cfg.redirect_uri).to match(/http:\/\/google.com/)
+    end
+    it 'change redirect_uri for user foo' do
+      @cfg.redirect_uri = 'http://google.com'
+      @cfg.redirect_uri = 'http://gaagle.com'
+      expect(@cfg.redirect_uri).to match(/http:\/\/gaagle.com/)
     end
   end
 
-  describe '#set_token' do
-    it 'save access_token to config file' do
-      cfg = Pocketbeuter::ConfigFile.instance
-      cfg.path = fixtures_path + "/#{Pocketbeuter::ConfigFile::CONFIG_NAME}"
-      cfg.set_token('foo', '13ea4f22-b153-d26a-58fe-77777')
-      expect(cfg.get_token('foo')).to match(/13ea4f22-b153-d26a-58fe-77777/)
+  describe '#consumer_key' do
+    before do
+      File.open(fixtures_path + '/emptyrc', File::RDWR | File::CREAT | File::TRUNC, 600) do |f|
+        f.write ''
+      end
+      @cfg = Pocketbeuter::ConfigFile.instance
+      @cfg.path = fixtures_path + '/emptyrc'
+      @cfg['account'] = {
+        'foo' => {
+          'consumer_key' => '1234-12345567889',
+          'redirect_uri' => 'http://google.com'
+        }
+      }
+    end
+
+    it 'returns consumer_key for user foo' do
+      expect(@cfg.consumer_key).to match(/1234-12345567889/)
+    end
+  end
+
+  describe '#consumer_key=' do
+    before do
+      File.open(fixtures_path + '/emptyrc', File::RDWR | File::CREAT | File::TRUNC, 600) do |f|
+        f.write ''
+      end
+      @cfg = Pocketbeuter::ConfigFile.instance
+      @cfg.path = fixtures_path + '/emptyrc'
+      @cfg['account'] = {
+        'foo' => {
+        }
+      }
+    end
+
+    it 'returns consumer_key for user foo' do
+      @cfg.consumer_key = '1234-12345567889'
+      expect(@cfg.consumer_key).to match(/1234-12345567889/)
+    end
+    it 'change consumer_key for user foo' do
+      @cfg.consumer_key = '1234-12345567889'
+      @cfg.consumer_key = '1234-12345567888'
+      expect(@cfg.consumer_key).to match(/1234-12345567888/)
+    end
+  end
+
+  describe '#access_token' do
+    before do
+      File.open(fixtures_path + '/emptyrc', File::RDWR | File::CREAT | File::TRUNC, 600) do |f|
+        f.write ''
+      end
+      @cfg = Pocketbeuter::ConfigFile.instance
+      @cfg.path = fixtures_path + '/emptyrc'
+      @cfg['account'] = {
+        'foo' => {
+          'access_token' => '1234-12345567889',
+          'redirect_uri' => 'http://google.com'
+        }
+      }
+    end
+
+    it 'returns access_token for user foo' do
+      expect(@cfg.access_token).to match(/1234-12345567889/)
+    end
+  end
+
+  describe '#access_token=' do
+    before do
+      File.open(fixtures_path + '/emptyrc', File::RDWR | File::CREAT | File::TRUNC, 600) do |f|
+        f.write ''
+      end
+      @cfg = Pocketbeuter::ConfigFile.instance
+      @cfg.path = fixtures_path + '/emptyrc'
+      @cfg['account'] = {
+        'foo' => {
+        }
+      }
+    end
+
+    it 'returns access_token for user foo' do
+      @cfg.access_token = '1234-12345567889'
+      expect(@cfg.access_token).to match(/1234-12345567889/)
+    end
+    it 'change access_token for user foo' do
+      @cfg.access_token = '1234-12345567889'
+      @cfg.access_token = '1234-12345567888'
+      expect(@cfg.access_token).to match(/1234-12345567888/)
+    end
+  end
+
+  describe '#code' do
+    before do
+      File.open(fixtures_path + '/emptyrc', File::RDWR | File::CREAT | File::TRUNC, 600) do |f|
+        f.write ''
+      end
+      @cfg = Pocketbeuter::ConfigFile.instance
+      @cfg.path = fixtures_path + '/emptyrc'
+      @cfg['account'] = {
+        'foo' => {
+          'code' => '1234-12345567889',
+          'redirect_uri' => 'http://google.com'
+        }
+      }
+    end
+
+    it 'returns code for user foo' do
+      expect(@cfg.code).to match(/1234-12345567889/)
+    end
+  end
+
+  describe '#code=' do
+    before do
+      File.open(fixtures_path + '/emptyrc', File::RDWR | File::CREAT | File::TRUNC, 600) do |f|
+        f.write ''
+      end
+      @cfg = Pocketbeuter::ConfigFile.instance
+      @cfg.path = fixtures_path + '/emptyrc'
+      @cfg['account'] = {
+        'foo' => {
+        }
+      }
+    end
+
+    it 'returns code for user foo' do
+      @cfg.code = '1234-12345567889'
+      expect(@cfg.code).to match(/1234-12345567889/)
+    end
+    it 'change code for user foo' do
+      @cfg.code = '1234-12345567889'
+      @cfg.code = '1234-12345567888'
+      expect(@cfg.code).to match(/1234-12345567888/)
+    end
+  end
+
+  describe '#username' do
+    before do
+      File.open(fixtures_path + '/emptyrc', File::RDWR | File::CREAT | File::TRUNC, 600) do |f|
+        f.write ''
+      end
+      @cfg = Pocketbeuter::ConfigFile.instance
+      @cfg.path = fixtures_path + '/emptyrc'
+      @cfg['account'] = {
+        'foo' => {
+          'username' => '1234-12345567889',
+          'redirect_uri' => 'http://google.com'
+        }
+      }
+    end
+
+    it 'returns username for user foo' do
+      expect(@cfg.username).to match(/1234-12345567889/)
+    end
+  end
+
+  describe '#username=' do
+    before do
+      File.open(fixtures_path + '/emptyrc', File::RDWR | File::CREAT | File::TRUNC, 600) do |f|
+        f.write ''
+      end
+      @cfg = Pocketbeuter::ConfigFile.instance
+      @cfg.path = fixtures_path + '/emptyrc'
+      @cfg['account'] = {
+        'foo' => {
+        }
+      }
+    end
+
+    it 'returns username for user foo' do
+      @cfg.username = '1234-12345567889'
+      expect(@cfg.username).to match(/1234-12345567889/)
+    end
+    it 'change username for user foo' do
+      @cfg.username = '1234-12345567889'
+      @cfg.username = '1234-12345567888'
+      expect(@cfg.username).to match(/1234-12345567888/)
     end
   end
 
