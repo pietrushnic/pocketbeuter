@@ -45,7 +45,9 @@ module Pocketbeuter
 
       #TODO: handle empty consumer_key
       @config.consumer_key = ask 'Enter consumer key:'
-      @config.redirect_uri = ask 'Enter redirect uri:'
+      #TODO: handle empty redirect_uri
+      redirect_uri = ask 'Enter redirect uri:'
+      @config.redirect_uri = redirect_uri
     end
 
     desc 'authorize', 'request Pocket user authorization'
