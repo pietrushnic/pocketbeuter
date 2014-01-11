@@ -35,7 +35,7 @@ module Pocketbeuter
       say "             license terms"
       ask " Press any key to open Pocket Create an Application form"
       say
-      #Launchy.open(Pocketbeuter::CLI::POCKET_DEV)
+      Launchy.open(Pocketbeuter::CLI::POCKET_DEV)
       account_name = ask "Enter account name [#{ENV['USER']}]:"
       if account_name.empty?
         @config.account_name = ENV['USER']
@@ -64,8 +64,8 @@ module Pocketbeuter
       res = http.request(request)
       @config.code = URI.decode_www_form(res.body).first[1]
       auth_url = AUTH_URL + "?request_token=#{@config.code}&redirect_uri=#{@config.redirect_uri}"
-      #Launchy.open(auth_url)
       say "Go to: #{auth_url}"
+      Launchy.open(auth_url)
       ask 'Press any key after authorization ...'
       uri = URI.parse(OAUTH_AUTH_URL)
       http = Net::HTTP.new(uri.host, uri.port)
