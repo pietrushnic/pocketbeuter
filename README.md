@@ -1,5 +1,5 @@
 # Pocketbeuter
-[![Gem Version](https://badge.fury.io/rb/pocketbeuter.png)](http://badge.fury.io/rb/pocketbeuter) 
+[![Gem Version](https://badge.fury.io/rb/pocketbeuter.png)](http://badge.fury.io/rb/pocketbeuter) [![Build Status](https://travis-ci.org/pietrushnic/pocketbeuter.png?branch=master)](https://travis-ci.org/pietrushnic/pocketbeuter)
 
 Pocketbeuter is a command line interface to [Pocket](http://getpocket.com) web application.
 
