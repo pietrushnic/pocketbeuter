@@ -48,6 +48,7 @@ module Pocketbeuter
       #TODO: handle empty redirect_uri
       redirect_uri = ask 'Enter redirect uri:'
       @config.redirect_uri = redirect_uri
+      @config.save_config
     end
 
     desc 'authorize', 'request Pocket user authorization'
@@ -75,6 +76,7 @@ module Pocketbeuter
       res = http.request(request)
       @config.access_token = URI.decode_www_form(res.body)[0][1]
       @config.username = URI.decode_www_form(res.body)[1][1]
+      @config.save_config
     end
   end
 end

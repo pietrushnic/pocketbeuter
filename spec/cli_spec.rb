@@ -37,6 +37,8 @@ describe Pocketbeuter::CLI do
       expect(@cli.config.account_name).to match(/foo/)
       expect(@cli.config.consumer_key).to match(/foo1337/)
       expect(@cli.config.redirect_uri).to match(/http:\/\/foo.bar/)
+      config =  {"options"=>{}, "account"=>{"foo"=>{"consumer_key"=>"foo1337", "redirect_uri"=>"http://foo.bar"}}}
+      expect(@cli.config.load_config).to eq(config)
     end
   end
   vcr_options = { :cassette_name => "authorize", :record => :new_episodes }
@@ -57,6 +59,8 @@ describe Pocketbeuter::CLI do
       expect(@cli.config.code).to match(/foobar42/)
       expect(@cli.config.access_token).to match(/barfoo42/)
       expect(@cli.config.username).to match(/joedoe/)
+      config = {"options"=>{}, "account"=>{"foo"=>{"consumer_key"=>"foo1337", "redirect_uri"=>"foo1337", "code"=>"foobar42", "access_token"=>"barfoo42", "username"=>"joedoe"}}}
+      expect(@cli.config.load_config).to eq(config)
     end
   end
 end
