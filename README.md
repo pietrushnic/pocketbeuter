@@ -1,6 +1,7 @@
 # Pocketbeuter
 [![Gem Version](https://badge.fury.io/rb/pocketbeuter.png)](http://badge.fury.io/rb/pocketbeuter) 
-TODO: Write a gem description
+
+Pocketbeuter is a command line interface to [Pocket](http://getpocket.com) web application.
 
 ## Installation
 
