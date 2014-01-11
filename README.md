@@ -18,7 +18,22 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+### Createapp
+
+    pocketbeuter createapp
+
+`createapp` subcommand guides through Pocket Application creating process. It asks about:
+ - account name - this is only for configuration reference and don't have to be Pocket username - by default it sets current user
+ - consumer key - you can find it after creating Pocket Application
+ - redirect uri - it doesn't matter for pocketbeuter - by default I set auth.md of this project
+
+### Authorize
+
+    pocketbeuter authorize
+
+After creating Pocket Application you can authorize to get access token. `authorize` subcommand
+use Launchy to open browser id it doesn't work in you environment (i.e. you're over ssh) then
+please copy displayed url and paste it browser.
 
 ## Contributing
 
