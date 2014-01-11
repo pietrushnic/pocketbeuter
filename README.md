@@ -1,5 +1,5 @@
 # Pocketbeuter
-
+[![Gem Version](https://badge.fury.io/rb/pocketbeuter.png)](http://badge.fury.io/rb/pocketbeuter) 
 TODO: Write a gem description
 
 ## Installation
