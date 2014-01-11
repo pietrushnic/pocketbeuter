@@ -57,6 +57,7 @@ module Pocketbeuter
       if @config.empty?
         createapp
       end
+      say 'Getting request token ...'
       uri = URI.parse(OAUTH_URL)
       http = Net::HTTP.new(uri.host, uri.port)
       request = Net::HTTP::Post.new(uri.request_uri)
